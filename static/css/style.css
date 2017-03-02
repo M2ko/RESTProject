@@ -18,7 +18,9 @@ html, body {
     z-index:2;
     width: 20%;
     height: 100%;
-    /*background: white;*/
+    background: white;
     float: left;
     margin: 3%;
+    box-shadow: 10px 10px 5px #888888;
+    border-radius: 15px;
 }
