@@ -3,12 +3,11 @@ from flask import Flask
 from flask import jsonify
 from flask import request
 from flask_pymongo import PyMongo
-import init_database as i_db
 
 app = Flask(__name__)
 
 app.config['MONGO_DBNAME'] = 'BarDB'
-app.config['MONGO_URI'] = 'mongodb://localhost:27017/'
+app.config['MONGO_URI'] = 'mongodb://localhost:27017/BarDB'
 
 mongo = PyMongo(app)
 
@@ -62,7 +61,7 @@ def update_one():
         return False
        
 @app.route('/bar/delete', methods=['GET'])
-def get_count(name):
+def get_count_all(name):
     bars = mongo.db.bars
     bars.delete_one({"name":name})
     if("No such" not in get_one_bar(name)):
