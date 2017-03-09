@@ -27,7 +27,7 @@ def get_all_bars():
     output.append(s)
   return json.dumps(output, sort_keys=True, indent=4, default=json_util.default)
 
-@app.route('/bars/', methods=['GET'])
+@app.route('/bar/<name>', methods=['GET'])
 def get_one_bar(name):
   bars = mongo.db.bars
   s = bars.find_one({'name' : name})
@@ -35,9 +35,9 @@ def get_one_bar(name):
     output = s
   else:
     output = "No such name"
-  return jsonify({'result' : output})
+  return json.dumps(output, sort_keys=True, indent=4, default=json_util.default)
 
-@app.route('/bar', methods=['POST'])
+@app.route('/bar/set', methods=['POST'])
 def add_bar():
   bar = mongo.db.bars
   name = request.json['name']

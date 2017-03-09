@@ -1,18 +1,13 @@
 var mymap
 function init() {
-     mymap = L.map('basicMap').setView([60.17, 24.94], 13);
+     mymap = L.map('basicMap').setView([60.17, 24.94], 14);
         L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
         attribution: "Openstreetmap",
-        maxZoom: 18}).addTo(mymap);
-        
+        //layers: MQ.mapLayer(),
+        maxZoom: 18   
+        }).addTo(mymap);
         
         getDataa("/bars","GET",addMarks);
-        //console.log(arr)
-        //var marker = L.marker([60.1690952, 24.9327473], {
-           // title: 'Bar'});
-        //marker.bindPopup('<p>Baari</p>');
-        //marker.on('click', onMarkerClick);
-        //marker.addTo(mymap);
         mymap.on('click', onMapClick);
   }
   
@@ -26,19 +21,51 @@ function init() {
       } else alert("erere")
    }
 
+   function addInfo(arr){
+    var openHours = document.getElementById('openHours');
+    var prices = document.getElementById('prices');
+    prices.innerHTML = "";
+    openHours.innerHTML = arr.openhours;
+    var li = document.createElement("li");
+    li.appendChild(document.createTextNode("Jäger: " + arr.prizes.beerprize+ "€"));
+    prices.appendChild(li);
+    li = document.createElement("li");
+    li.appendChild(document.createTextNode("Beer: " + arr.prizes.jagermaister+ "€"));
+    prices.appendChild(li);
+    document.getElementById('infoBox').style.visibility = 'visible';
+   }
+  function addRoute(latlng){
+      var dir = MQ.routing.directions();
+
+dir.route({
+  locations: [
+  { street: 'Bulevardi 31', city: 'Helsinki' },
+    { latLng: { lat: latlng.lat, lng: latlng.lng } }
+  ]
+});
+
+mymap.addLayer(MQ.routing.routeLayer({
+  directions: dir
+}));
+      
+      
+      //var control = L.Routing.control( {
+//	waypoints: [
+//		L.latLng(,),
+//		L.latLng(60.179,24.945)
+//	],
+//	geocoder: L.Control.Geocoder.nominatim()
+  //  }).addTo(mymap);
+  }
   
   function onMarkerClick(e) {
     //alert(e.target.options.title);
     var barName = document.getElementById('barName');
-    var openHours = document.getElementById('openHours');
-    var prices = document.getElementById('prices');
-    
-    var li = document.createElement("li");
-    li.appendChild(document.createTextNode("Beer: " + "4,5e"));
     barName.innerHTML = e.target.options.title;
-    openHours.innerHTML = "Open hours: " + "8:00-4:00";
-    prices.appendChild(li);
-    document.getElementById('infoBox').style.visibility = 'visible';
+        
+    getDataa("/bar/"+e.target.options.title,"GET",addInfo);
+    addRoute(e.latlng)
+
   }
   
   function onMapClick(e) {
