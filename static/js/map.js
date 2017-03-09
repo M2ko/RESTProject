@@ -13,7 +13,7 @@ function init() {
   }
   
   function onMarkerClick(e) {
-    alert(e.target.title);
+    alert(e.target.options.title);
     var barName = document.getElementById('barName');
     var openHours = document.getElementById('openHours');
     var prices = document.getElementById('prices');
