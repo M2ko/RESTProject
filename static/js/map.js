@@ -69,5 +69,6 @@ mymap.addLayer(MQ.routing.routeLayer({
   }
   
   function onMapClick(e) {
+    document.getElementById('inputgroup').style.visibility = 'hidden';
     document.getElementById('infoBox').style.visibility = 'hidden';
   }

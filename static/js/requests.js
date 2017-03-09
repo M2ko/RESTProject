@@ -22,3 +22,8 @@ function bars2map() {
     arr = request("/bars","GET");
     
 }
+
+function directionsInput() {
+    document.getElementById('inputgroup').style.visibility = 'visible';
+    
+}

@@ -25,3 +25,14 @@ html, body {
     border-radius: 15px;
     visibility: hidden;
 }
+#directionsBtn {
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    width:20%;
+    height:100%;
+}
+.input-group {
+    margin: 3%;
+    visibility: hidden;
+}
