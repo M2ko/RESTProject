@@ -92,7 +92,7 @@ function directionsSend(){
         
     getDataa("/bar/"+e.target.options.title,"GET",addInfo);
     latlng = e.latlng;
-    addRoute(e.latlng,"Bulevardi 31")
+    //addRoute(e.latlng,"Bulevardi 31")
 
   }
   

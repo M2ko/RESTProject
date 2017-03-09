@@ -1,7 +1,7 @@
 
 
 var getDataa = function(path,method, callback){
-    var url = "http://127.0.0.1:5000"; 
+    var url = "http://localhost"; 
     url = url+path;
     var xmlhttp = new XMLHttpRequest();
 
