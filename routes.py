@@ -15,6 +15,10 @@ app.config['MONGO_URI'] = 'mongodb://localhost:27017/BarDB'
 mongo = PyMongo(app)
 
 
+@app.route('/developer')
+def developer():
+    return render_template('index.html')
+        
 @app.route('/')
 def hello_world():
     return render_template('index.html')
