@@ -1,8 +1,11 @@
 
-from flask import Flask
+from flask import Flask, render_template
 from flask import jsonify
 from flask import request
 from flask_pymongo import PyMongo
+import json
+from bson import BSON
+from bson import json_util
 
 app = Flask(__name__)
 
@@ -22,7 +25,7 @@ def get_all_bars():
   output = []
   for s in bars.find():
     output.append(s)
-  return jsonify({'result' : output})
+  return json.dumps(output, sort_keys=True, indent=4, default=json_util.default)
 
 @app.route('/bars/', methods=['GET'])
 def get_one_bar(name):
