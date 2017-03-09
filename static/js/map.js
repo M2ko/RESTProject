@@ -1,12 +1,22 @@
 var mymap
+var mapLayer = MQ.mapLayer()
+var popup = L.popup();
+var routeL;
+var latlng;
 function init() {
      mymap = L.map('basicMap').setView([60.17, 24.94], 14);
         L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-        attribution: "Openstreetmap",
-        //layers: MQ.mapLayer(),
-        maxZoom: 18   
+            attribution: "Openstreetmap",
+            layers: mapLayer,
+            maxZoom: 18   
         }).addTo(mymap);
-        
+        L.control.layers({
+            'Map': mapLayer,
+            'Hybrid': MQ.hybridLayer(),
+            'Satellite': MQ.satelliteLayer(),
+            'Dark': MQ.darkLayer(),
+            'Light': MQ.lightLayer()
+        }).addTo(mymap);
         getDataa("/bars","GET",addMarks);
         mymap.on('click', onMapClick);
   }
@@ -34,29 +44,46 @@ function init() {
     prices.appendChild(li);
     document.getElementById('infoBox').style.visibility = 'visible';
    }
-  function addRoute(latlng){
-      var dir = MQ.routing.directions();
+  function addRoute(latlng, street){
+      if(routeL) mymap.removeLayer(routeL)
+      var dir = MQ.routing.directions().on('success', function(data) {
+        var legs = data.route.legs,
+            html = '',
+            maneuvers,
+            i;
 
-dir.route({
-  locations: [
-  { street: 'Bulevardi 31', city: 'Helsinki' },
-    { latLng: { lat: latlng.lat, lng: latlng.lng } }
-  ]
-});
+        if (legs && legs.length) {
+            maneuvers = legs[0].maneuvers;
 
-mymap.addLayer(MQ.routing.routeLayer({
-  directions: dir
-}));
-      
-      
-      //var control = L.Routing.control( {
-//	waypoints: [
-//		L.latLng(,),
-//		L.latLng(60.179,24.945)
-//	],
-//	geocoder: L.Control.Geocoder.nominatim()
-  //  }).addTo(mymap);
-  }
+            for (i=0; i < maneuvers.length; i++) {
+                html += (i+1) + '. ';
+                html += maneuvers[i].narrative + '';
+            }
+            //L.DomUtil.get('prices').innerHTML = html;
+        }
+    });
+
+    dir.optimizedRoute({
+        locations: [
+            { street:street, city: 'Helsinki' },
+            { latLng: { lat: latlng.lat, lng: latlng.lng } }
+        ],
+        options: {
+        routeType: "pedestrian"    
+        }
+    });
+    routeL =MQ.routing.routeLayer({
+        directions: dir
+    })
+    mymap.addLayer(routeL);
+}
+
+function directionsSend(){
+    console.log(document.getElementById('startpoint').value)
+    if(document.getElementById('startpoint').value){
+        addRoute(latlng,document.getElementById('startpoint').value)
+    }
+}
   
   function onMarkerClick(e) {
     //alert(e.target.options.title);
@@ -64,7 +91,8 @@ mymap.addLayer(MQ.routing.routeLayer({
     barName.innerHTML = e.target.options.title;
         
     getDataa("/bar/"+e.target.options.title,"GET",addInfo);
-    addRoute(e.latlng)
+    latlng = e.latlng;
+    addRoute(e.latlng,"Bulevardi 31")
 
   }
   
