@@ -30,7 +30,7 @@ def require_appkey(view_function):
 
 @app.route('/developer')
 def developer():
-    return render_template('index.html')
+    return render_template('developer.html')
         
 @app.route('/')
 def hello_world():

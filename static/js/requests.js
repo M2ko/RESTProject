@@ -22,3 +22,8 @@ function directionsInput() {
     document.getElementById('inputgroup').style.visibility = 'visible';
     
 }
+
+function gotoDeveloper() {
+    console.log("localhost/developer");
+    window.location = "developer";
+}
