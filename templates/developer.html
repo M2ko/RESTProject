@@ -30,10 +30,6 @@
         <td>/bar/count</td>
         <td>Returns number of the bars</td>
       </tr>
-      <tr>
-        <td>/bar/count</td>
-        <td>Returns number of the bars</td>
-      </tr>
     </tbody>
   </table>
     <p>POST requests</p>
@@ -46,20 +42,27 @@
     </thead>
     <tbody>
       <tr>
-        <td>/bars</td>
-        <td>Lists all bars</td>
+        <td>/bar/(name)</td>
+        <td>Updates one bar with specified (name)</td>
       </tr>
+      <tr>
+        <td>/bar/add_bar</td>
+        <td>Adds new bar</td>
+      </tr>
+    </tbody>
+  </table>
+  <p>Delete requests</p>
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>Request</th>
+        <th>Response</th>
+      </tr>
+    </thead>
+    <tbody>
       <tr>
         <td>/bar/(name)</td>
-        <td>Returns one bar with specified (name)</td>
-      </tr>
-      <tr>
-        <td>/bar/count</td>
-        <td>Returns number of the bars</td>
-      </tr>
-      <tr>
-        <td>/bar/count</td>
-        <td>Returns number of the bars</td>
+        <td>Deletes one bar with specified (name)</td>
       </tr>
     </tbody>
   </table>
