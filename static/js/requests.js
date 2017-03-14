@@ -2,7 +2,7 @@
 
 var getDataa = function(path,method, callback){
     var url = "http://localhost"; 
-    url = url+path;
+    url = url+path+"?key=5ec987";
     var xmlhttp = new XMLHttpRequest();
 
     xmlhttp.open(method, url, true);
