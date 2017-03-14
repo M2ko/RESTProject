@@ -17,7 +17,7 @@ function init() {
             'Dark': MQ.darkLayer(),
             'Light': MQ.lightLayer()
         }).addTo(mymap);
-        getDataa("/bars","GET",addMarks);
+        getDataa("/v2/bars","GET",addMarks);
         mymap.on('click', onMapClick);
   }
   

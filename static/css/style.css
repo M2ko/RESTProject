@@ -32,7 +32,7 @@ html, body {
     width:20%;
     height:100%;
 }
-.input-group {
+#input-group {
     margin: 3%;
     visibility: hidden;
 }
@@ -42,4 +42,12 @@ html, body {
     top: 0px;
     right: 10%;
     z-index: 10;
+}
+
+#generateKey {
+    margin: 1%;
+}
+
+#test {
+    margin: 2%;
 }

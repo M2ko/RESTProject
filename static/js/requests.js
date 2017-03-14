@@ -10,10 +10,13 @@ var getDataa = function(path,method, callback){
     xmlhttp.onreadystatechange = function() {
         if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
             var myArr = JSON.parse(xmlhttp.responseText);
-            console.log(myArr)
+            console.log(myArr);
+            if(document.getElementById("result")) {
+                document.getElementById("result").innerHTML = xmlhttp.responseText;
+            }
             callback(myArr);
         } else return false;
-    }
+    };
         
 }
 
@@ -23,12 +26,12 @@ var setDataa = function(path){
     var xmlhttp = new XMLHttpRequest();
 
     var data = new FormData();
-    data.append('name', 'AAA');
-    data.append('lon', '3');
-    data.append('lat', '4');
-    data.append('beerprize', '5');
-    data.append('jagermaister', '50');
-    data.append('openhours', '10:50-1:00');
+    data.append('name', document.getElementById('barname').value);
+    data.append('lat', document.getElementById('lat').value);
+    data.append('lon', document.getElementById('lon').value);
+    data.append('beerprize', document.getElementById('beerprize').value);
+    data.append('jagermaister', document.getElementById('jager').value);
+    data.append('openhours', document.getElementById('open').value);
     
     
     xmlhttp.open("POST", url, true);
@@ -36,18 +39,39 @@ var setDataa = function(path){
         if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
             var myArr = JSON.parse(xmlhttp.responseText);
             console.log(myArr)
-            callback(myArr);
+            //callback(myArr);
         } else return false;
     }
     xmlhttp.send(data);
 }
 
 function directionsInput() {
-    document.getElementById('inputgroup').style.visibility = 'visible';
+    document.getElementById('input-group').style.visibility = 'visible';
     
 }
 
 function gotoDeveloper() {
     console.log("localhost/developer");
     window.location = "developer";
+}
+
+function generateKey() {
+    var hashs = ["2ad72c", "5ec987", "78721e", "adc21b", "12562", "aef21b"];
+    var well = document.getElementById("keyWell");
+    var p = document.getElementById("key");
+    var rand = Math.floor((Math.random() * 6));
+    
+    p.innerHTML = hashs[rand];
+    well.appendChild(p);
+}
+
+function testQuery(method) {
+    var value = document.getElementById("testQuery").value;
+    var result = document.getElementById("result");
+    var div = document.createElement("div");
+    div.innerHTML = value;
+    result.innerHTML = getDataa(div.innerText, method ,null);
+}
+function postForm() {
+    setDataa("/v2/bar/setnew");
 }

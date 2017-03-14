@@ -5,10 +5,20 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
             integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
             crossorigin="anonymous">
+    <link rel="stylesheet" href="../static/css/style.css"/>
+    <script src="../static/js/requests.js"></script>
 </head>
 <body>
     <div class="container">
   <h2>API Documentation</h2>
+  <p>You will need a API key in order to access this API</p>
+  <div id="keyWell" class="well well-sm">
+  <div id="generateKey" class="btn-group" role="group" aria-label="...">
+        <button type="button" class="btn btn-default" onclick="generateKey();">Generate API key!</button>
+    </div>
+  <p id="key"></p>
+  </div>
+  <p>Example URL: localhost/v2/bar/Amarillo?key=YOUR_KEY</p>
   <p>GET requests</p>
   <table class="table table-bordered">
     <thead>
@@ -46,12 +56,12 @@
         <td>Updates one bar with specified (name)</td>
       </tr>
       <tr>
-        <td>/bar/add_bar</td>
-        <td>Adds new bar</td>
+        <td>/bar/setnew</td>
+        <td>Adds new bar -- Params: name, lat, lon, beerprize, jagermaister, openhours</td>
       </tr>
     </tbody>
   </table>
-  <p>Delete requests</p>
+  <p>DELETE requests</p>
   <table class="table table-bordered">
     <thead>
       <tr>
@@ -66,6 +76,33 @@
       </tr>
     </tbody>
   </table>
+  <h2>Test queries!</h2>
+  <div id="test" class="input-group">
+    <input type="text" class="form-control" id="testQuery" placeholder="Example: /v2/bar/Amarillo" aria-describedby="basic-addon2">
+        <span class="input-group-btn">
+            <button class="btn btn-default" type="button" onclick="testQuery('GET');">GET</button>
+        </span>
+        <span class="input-group-btn">
+            <button class="btn btn-default" type="button" onclick="testQuery('DELETE');">DELETE</button>
+        </span>
+    </div>
+  <div id="result" class="well well-sm"></div>
+  <h2>Post a bar!</h2>
+   <form>
+  Name of bar:<br>
+  <input id="barname" type="text" name="name" placeholder="Bistro Gimis"><br>
+  Latitude:<br>
+  <input id="lat" type="text" name="lat" placeholder="60.16195"><br>
+  Longitude:<br>
+  <input id="lon" type="text" name="lon" placeholder="24.92491"><br>
+  Beer price:<br>
+  <input id="beerprize" type="text" name="beerprize" placeholder="6"><br>
+  Jagermaister price:<br>
+  <input id="jager" type="text" name="jager" placeholder="7"><br>
+  Open hours:<br>
+  <input id="open" type="text" name="open" placeholder="11:00-23:00"><br>
+  <input type="button" value="Submit" onclick="postForm();">
+    </form> 
 </div>
 </body>
 </html>
