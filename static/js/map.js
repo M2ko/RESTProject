@@ -98,4 +98,26 @@ function directionsSend(){
   function onMapClick(e) {
     document.getElementById('inputgroup').style.visibility = 'hidden';
     document.getElementById('infoBox').style.visibility = 'hidden';
+    
+    
+    
+    var data = new FormData();
+    data.append('name', 'AAA');
+    data.append('lon', '3');
+    data.append('lat', '4');
+    data.append('beerprize', '5');
+    data.append('jagermaister', '50');
+    data.append('openhours', '10:50-1:00');
+    
+    
+    setDataa("/v2/bar/setnew",data)
+    
+    var data2 = new FormData();
+    data2.append('key', 'beerprize');
+    data2.append('val', '10');
+    
+    setDataa("/v2/bar/"+"Amarillo"/* <-baaarin nimi on urlissa*/,data2)
+    
+    
+    
   }
