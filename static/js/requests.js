@@ -1,7 +1,7 @@
 
 
 var getDataa = function(path,method, callback){
-    var url = "http://localhost"; 
+    var url = "http://localhost:5000"; 
     url = url+path+"?key=5ec987";
     var xmlhttp = new XMLHttpRequest();
     
@@ -20,20 +20,11 @@ var getDataa = function(path,method, callback){
         
 }
 
-var setDataa = function(path){
-    var url = "http://localhost"; 
+var setDataa = function(path,data){
+    var url = "http://localhost:5000"; 
     url = url+path+"?key=5ec987";
     var xmlhttp = new XMLHttpRequest();
 
-    var data = new FormData();
-    data.append('name', document.getElementById('barname').value);
-    data.append('lat', document.getElementById('lat').value);
-    data.append('lon', document.getElementById('lon').value);
-    data.append('beerprize', document.getElementById('beerprize').value);
-    data.append('jagermaister', document.getElementById('jager').value);
-    data.append('openhours', document.getElementById('open').value);
-    
-    
     xmlhttp.open("POST", url, true);
     xmlhttp.onreadystatechange = function() {
         if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
@@ -70,8 +61,43 @@ function testQuery(method) {
     var result = document.getElementById("result");
     var div = document.createElement("div");
     div.innerHTML = value;
-    result.innerHTML = getDataa(div.innerText, method ,null);
+    result.innerHTML = getTestQuery(div.innerText, method);
 }
+
+function getTestQuery(path,method) {
+    var url = "http://localhost:5000"; 
+    url = url+path;
+    var xmlhttp = new XMLHttpRequest();
+    
+    xmlhttp.open(method, url, true);
+    xmlhttp.send();
+    xmlhttp.onreadystatechange = function() {
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+            var myArr = JSON.parse(xmlhttp.responseText);
+            console.log(myArr);
+            if(document.getElementById("result")) {
+                document.getElementById("result").innerHTML = xmlhttp.responseText;
+            }
+            callback(myArr);
+        } else return false;
+    };
+}
+
 function postForm() {
-    setDataa("/v2/bar/setnew");
+    var data = new FormData();
+    data.append('name', document.getElementById('barname').value);
+    data.append('lat', document.getElementById('lat').value);
+    data.append('lon', document.getElementById('lon').value);
+    data.append('beerprize', document.getElementById('beerprize').value);
+    data.append('jagermaister', document.getElementById('jager').value);
+    data.append('openhours', document.getElementById('open').value);
+    setDataa("/v2/bar/setnew",data);
+}
+
+function updateBar() {
+    var data = new FormData();
+    data.append('key', document.getElementById('keyy').value);
+    data.append('val', document.getElementById('val').value);
+    var name = document.getElementById('barupname').value
+    setDataa("/v2/bar/"+name,data);
 }

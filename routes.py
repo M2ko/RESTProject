@@ -35,6 +35,16 @@ def developer():
 @app.route('/')
 def hello_world():
     return render_template('index.html')
+
+@app.route('/v2/bar/<name>/prizes', methods=['GET'])
+@require_appkey
+def get_prices(name):
+    bars = mongo.db.bars
+    s = bars.find_one_or_404({'name' : name})
+    if s:
+      output = s['prizes']
+    return json.dumps(output, sort_keys=True, indent=4, default=json_util.default)
+
   
 @app.route('/v2/bars', methods=['GET'])
 @require_appkey
@@ -59,7 +69,7 @@ def bar_request(name):
         
 def get_one_bar(name):
   bars = mongo.db.bars
-  s = bars.find_one({'name' : name})
+  s = bars.find_one_or_404({'name' : name})
   if s:
     output = s
   else:
@@ -85,7 +95,8 @@ def add_bar():
 @require_appkey
 def get_count():
     bar = mongo.db.bars
-    return bar.count()
+    return str(bar.count())
+
 
 ###@app.route('/v2/bar/update', methods=['POST'])
 def update_one(name):

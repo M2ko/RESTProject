@@ -37,6 +37,10 @@
         <td>Returns one bar with specified (name)</td>
       </tr>
       <tr>
+        <td>/bar/(name)/prizes</td>
+        <td>Returns prizes[beer, jager] of bar named (name)</td>
+      </tr>
+      <tr>
         <td>/bar/count</td>
         <td>Returns number of the bars</td>
       </tr>
@@ -53,7 +57,7 @@
     <tbody>
       <tr>
         <td>/bar/(name)</td>
-        <td>Updates one bar with specified (name)</td>
+        <td>Updates one bar with specified (name). -- Params: key = (name, lat, lon, beerprize, jagermaister, openhours) and val=*string*</td>
       </tr>
       <tr>
         <td>/bar/setnew</td>
@@ -78,7 +82,7 @@
   </table>
   <h2>Test queries!</h2>
   <div id="test" class="input-group">
-    <input type="text" class="form-control" id="testQuery" placeholder="Example: /v2/bar/Amarillo" aria-describedby="basic-addon2">
+    <input type="text" class="form-control" id="testQuery" placeholder="Example: /v2/bar/Amarillo?key=<KEY>" aria-describedby="basic-addon2">
         <span class="input-group-btn">
             <button class="btn btn-default" type="button" onclick="testQuery('GET');">GET</button>
         </span>
@@ -87,6 +91,8 @@
         </span>
     </div>
   <div id="result" class="well well-sm"></div>
+  <div class="row">
+    <div class ="col-md-6 col-sm-6">
   <h2>Post a bar!</h2>
    <form>
   Name of bar:<br>
@@ -101,8 +107,22 @@
   <input id="jager" type="text" name="jager" placeholder="7"><br>
   Open hours:<br>
   <input id="open" type="text" name="open" placeholder="11:00-23:00"><br>
-  <input type="button" value="Submit" onclick="postForm();">
-    </form> 
+  <input type="button" value="POST" onclick="postForm();">
+    </form>
+    </div>
+     <div class ="col-md-6 col-sm-6">
+     <h2>Update a bar!</h2>
+   <form>
+   Name of bar:<br>
+   <input id="barupname" type="text" name="name" placeholder="Amarillo"><br>
+  key:<br>
+  <input id="keyy" type="text" name="key" placeholder="openhours"><br>
+  val:<br>
+  <input id="val" type="text" name="val" placeholder="11:00-23:00"><br>
+  <input type="button" value="POST" onclick="updateBar();">
+   </form>
+   </div>
+    </div>
 </div>
 </body>
 </html>
