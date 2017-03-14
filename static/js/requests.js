@@ -7,7 +7,7 @@ var getDataa = function(path,method, callback){
 
     xmlhttp.open(method, url, true);
     xmlhttp.send();
-
+    console.log("asd")
     xmlhttp.onreadystatechange = function() {
         if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
             var myArr = JSON.parse(xmlhttp.responseText);
@@ -16,11 +16,6 @@ var getDataa = function(path,method, callback){
         } else return false;
     }
         
-}
-
-function bars2map() {
-    arr = request("/bars","GET");
-    
 }
 
 function directionsInput() {

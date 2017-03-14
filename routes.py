@@ -6,6 +6,8 @@ from flask_pymongo import PyMongo
 import json
 from bson import BSON
 from bson import json_util
+from functools import wraps
+from flask import request, abort
 
 app = Flask(__name__)
 
@@ -14,6 +16,17 @@ app.config['MONGO_URI'] = 'mongodb://localhost:27017/BarDB'
 
 mongo = PyMongo(app)
 
+# The actual decorator function
+def require_appkey(view_function):
+    @wraps(view_function)
+    # the new, post-decoration function. Note *args and **kwargs here.
+    def decorated_function(*args, **kwargs):
+        hashs = ["2ad72c", "5ec987", "78721e", "adc21b", "12562", "aef21b"]
+        if request.args.get('key') and request.args.get('key') in hashs:
+            return view_function(*args, **kwargs)
+        else:
+            abort(401)
+    return decorated_function
 
 @app.route('/developer')
 def developer():
@@ -23,7 +36,8 @@ def developer():
 def hello_world():
     return render_template('index.html')
   
-@app.route('/bars', methods=['GET'])
+@app.route('/v2/bars', methods=['GET'])
+@require_appkey
 def get_all_bars():
   bars = mongo.db.bars
   output = []
@@ -31,7 +45,18 @@ def get_all_bars():
     output.append(s)
   return json.dumps(output, sort_keys=True, indent=4, default=json_util.default)
 
-@app.route('/bar/<name>', methods=['GET'])
+
+@app.route('/v2/bar/<name>', methods=['GET', 'DELETE', 'POST'])
+@require_appkey
+def bar_request(name):
+    if request.method == 'GET':
+        return get_one_bar(name)
+    elif request.method == 'DELETE':
+        return delete_bar(name)
+    elif request.method == 'POST':
+        return update_one(name)
+        
+        
 def get_one_bar(name):
   bars = mongo.db.bars
   s = bars.find_one({'name' : name})
@@ -41,45 +66,47 @@ def get_one_bar(name):
     output = "No such name"
   return json.dumps(output, sort_keys=True, indent=4, default=json_util.default)
 
-@app.route('/bar/set', methods=['POST'])
+@app.route('/v2/bar/setnew', methods=['POST'])
+@require_appkey
 def add_bar():
   bar = mongo.db.bars
-  name = request.json['name']
-  lon = request.json['lon']
-  lat = request.json['lat']
-  beerprize = request.json['beerprize']
-  jagermaister = request.json['jagermaister']
-  openhours = request.json['openhours']
-  bar_id = bar.insert_one({"name" : name, "lon":lon, "lat":lat, "beerprize":beerprize, "jagermaister":jagermaister, "openhours":openhours})
-  new_bar = bar.find_one({'_id': bar_id })
-  return jsonify({'result' : new_bar})
+  name = request.form['name']
+  lon = request.form['lon']
+  lat = request.form['lat']
+  beerprize = request.form['beerprize']
+  jagermaister = request.form['jagermaister']
+  openhours = request.form['openhours']
+  bar_id = bar.insert_one({"name" : name, "lon":lon, "lat":lat, "prizes":{"beerprize":beerprize, "jagermaister":jagermaister}, "openhours":openhours})
+  new_bar = bar.find_one({'name': name })
+  return json.dumps(new_bar, sort_keys=True, indent=4, default=json_util.default)
 
-@app.route('/bar/count', methods=['GET'])
+
+@app.route('/v2/bar/count', methods=['GET'])
+@require_appkey
 def get_count():
     bar = mongo.db.bars
     return bar.count()
 
-@app.route('/bar/update', methods=['POST'])
-def update_one():
+###@app.route('/v2/bar/update', methods=['POST'])
+def update_one(name):
     bars = mongo.db.bars
-    name = request.json['name']
-    key = request.json['key']
-    val = request.json['val']
+    key = request.form['key']
+    val = request.form['val']
     bar_id = bars.update_one({'name':name}, {"$set": {key:val}}, upsert=False)
-    new_bar = bars.find_one({'_id': bar_id })
-    if(new_bar['key']==val):
-        return True
+    new_bar = bars.find_one({'name' : name})
+    if(new_bar[key]==val):
+        return "success"
     else:
-        return False
+        return "false"
        
-@app.route('/bar/delete', methods=['GET'])
-def get_count_all(name):
+##@app.route('/v2/bar/delete/<name>', methods=['DELETE'])
+def delete_bar(name):
     bars = mongo.db.bars
     bars.delete_one({"name":name})
     if("No such" not in get_one_bar(name)):
-        return True
+        abort(410)
     else:
-        return False
+        abort(404)
 
 if __name__ == '__main__':
     app.run(debug=True)

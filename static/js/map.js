@@ -89,8 +89,7 @@ function directionsSend(){
     //alert(e.target.options.title);
     var barName = document.getElementById('barName');
     barName.innerHTML = e.target.options.title;
-        
-    getDataa("/bar/"+e.target.options.title,"GET",addInfo);
+    getDataa("/v2/bar/"+e.target.options.title,"GET",addInfo);
     latlng = e.latlng;
     //addRoute(e.latlng,"Bulevardi 31")
 
