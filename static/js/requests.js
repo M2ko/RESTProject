@@ -1,7 +1,7 @@
 
 
 var getDataa = function(path,method, callback){
-    var url = "http://localhost:5000"; 
+    var url = "http://localhost"; 
     url = url+path+"?key=5ec987";
     var xmlhttp = new XMLHttpRequest();
     
@@ -21,7 +21,7 @@ var getDataa = function(path,method, callback){
 }
 
 var setDataa = function(path,data){
-    var url = "http://localhost:5000"; 
+    var url = "http://localhost"; 
     url = url+path+"?key=5ec987";
     var xmlhttp = new XMLHttpRequest();
 
@@ -65,7 +65,7 @@ function testQuery(method) {
 }
 
 function getTestQuery(path,method) {
-    var url = "http://localhost:5000"; 
+    var url = "http://localhost"; 
     url = url+path;
     var xmlhttp = new XMLHttpRequest();
     
